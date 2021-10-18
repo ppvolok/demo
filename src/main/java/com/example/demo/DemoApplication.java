@@ -34,6 +34,7 @@ public class DemoApplication implements CommandLineRunner {
         for (WildberriesCategory category : this.categoryList) {
             System.out.println(category);
         }
+        System.exit(0);
     }
 
     private void getCategoryRow(JSONArray menu, Long parentId) {
