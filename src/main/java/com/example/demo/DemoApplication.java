@@ -43,7 +43,7 @@ public class DemoApplication implements CommandLineRunner {
             Long id = item.getLong("id");
             WildberriesCategory category = new WildberriesCategory(id, parentId, item.getString("name"));
             this.categoryList.add(category);
-            JSONArray childMenu = null;
+            JSONArray childMenu;
             try {
                 childMenu = item.getJSONArray("childs");
             } catch (Exception e) {
