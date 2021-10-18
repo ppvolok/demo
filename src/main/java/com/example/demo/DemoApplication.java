@@ -25,7 +25,7 @@ public class DemoApplication implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         String response = wildberriesClient.getForObject("/gettopmenuinner?lang=ru", String.class);
         JSONObject jsonObject = new JSONObject(response);
         JSONObject jsonValue = (JSONObject) jsonObject.get("value");
