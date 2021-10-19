@@ -1,4 +1,4 @@
-package com.example.demo.json;
+package com.example.demo.object;
 
 public class WildberriesCategory {
     private long id; // не может быть null

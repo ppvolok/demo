@@ -1,6 +1,6 @@
 package com.example.demo;
 
-import com.example.demo.json.WildberriesCategory;
+import com.example.demo.object.WildberriesCategory;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.boot.CommandLineRunner;
