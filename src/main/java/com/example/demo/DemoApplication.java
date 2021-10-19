@@ -15,8 +15,6 @@ import java.util.List;
 @SpringBootApplication
 public class DemoApplication implements CommandLineRunner {
 
-    private List<WildberriesCategory> categoryList = new ArrayList<>();
-
     @Resource
     RestTemplate wildberriesClient;
 
@@ -30,19 +28,19 @@ public class DemoApplication implements CommandLineRunner {
         JSONObject jsonObject = new JSONObject(response);
         JSONObject jsonValue = (JSONObject) jsonObject.get("value");
         JSONArray jsonMenu = (JSONArray) jsonValue.get("menu");
-        getCategoryRow(jsonMenu, null);
-        for (WildberriesCategory category : this.categoryList) {
+        List<WildberriesCategory> list = getCategoryRow(jsonMenu, null, new ArrayList<>());
+        for (WildberriesCategory category : list) {
             System.out.println(category);
         }
         System.exit(0);
     }
 
-    private void getCategoryRow(JSONArray menu, Long parentId) {
+    private List<WildberriesCategory> getCategoryRow(JSONArray menu, Long parentId, List<WildberriesCategory> list) {
         for (int i = 0; i < menu.length(); i++) {
             JSONObject item = (JSONObject) menu.get(i);
             Long id = item.getLong("id");
             WildberriesCategory category = new WildberriesCategory(id, parentId, item.getString("name"));
-            this.categoryList.add(category);
+            list.add(category);
             JSONArray childMenu;
             try {
                 childMenu = item.getJSONArray("childs");
@@ -50,8 +48,9 @@ public class DemoApplication implements CommandLineRunner {
                 childMenu = null;
             }
             if (childMenu != null) {
-                getCategoryRow(childMenu, id); // чтобы понять рекурсию - надо понять рекурсию :-)
+                list = getCategoryRow(childMenu, id, list); // чтобы понять рекурсию - надо понять рекурсию :-)
             }
         }
+        return list;
     }
 }
