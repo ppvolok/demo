@@ -79,14 +79,14 @@ public class WildberriesService {
             Map<String, String> data = new HashMap<>();
             data.put("product", productJsonString);
 
-            Map<String, String> supplierData = supplierAndOptionsData.
-                    stream()
+            Map<String, String> supplierData = supplierAndOptionsData
+                    .stream()
                     .filter(object -> object.get("supplier").contains(String.valueOf(product.get("id"))))
                     .findFirst().get();
             data.put("supplier", supplierData.get("supplier"));
 
-            Map<String, String> optionsData = supplierAndOptionsData.
-                    stream()
+            Map<String, String> optionsData = supplierAndOptionsData
+                    .stream()
                     .filter(object -> object.get("options").contains(String.valueOf(product.get("id"))))
                     .findFirst().get();
             data.put("options", optionsData.get("options"));
