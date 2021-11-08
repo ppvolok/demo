@@ -1,22 +1,19 @@
 package com.example.demo;
 
-import com.example.demo.object.WildberriesCategory;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.example.demo.service.WildberriesService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @SpringBootApplication
 public class DemoApplication implements CommandLineRunner {
 
     @Resource
-    RestTemplate wildberriesClient;
+    WildberriesService wildberriesService;
 
     public static void main(String[] args) {
         SpringApplication.run(DemoApplication.class, args);
@@ -24,33 +21,8 @@ public class DemoApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        String response = wildberriesClient.getForObject("/gettopmenuinner?lang=ru", String.class);
-        JSONObject jsonObject = new JSONObject(response);
-        JSONObject jsonValue = (JSONObject) jsonObject.get("value");
-        JSONArray jsonMenu = (JSONArray) jsonValue.get("menu");
-        List<WildberriesCategory> list = getCategoryRow(jsonMenu, null, new ArrayList<>());
-        for (WildberriesCategory category : list) {
-            System.out.println(category);
-        }
+        List<Integer> ids = Arrays.asList(12403166, 2147837, 15556062, 40019873);
+        System.out.println(wildberriesService.getWildberriesData(ids));
         System.exit(0);
-    }
-
-    private List<WildberriesCategory> getCategoryRow(JSONArray menu, Long parentId, List<WildberriesCategory> list) {
-        for (int i = 0; i < menu.length(); i++) {
-            JSONObject item = (JSONObject) menu.get(i);
-            Long id = item.getLong("id");
-            WildberriesCategory category = new WildberriesCategory(id, parentId, item.getString("name"));
-            list.add(category);
-            JSONArray childMenu;
-            try {
-                childMenu = item.getJSONArray("childs");
-            } catch (Exception e) {
-                childMenu = null;
-            }
-            if (childMenu != null) {
-                list = getCategoryRow(childMenu, id, list); // чтобы понять рекурсию - надо понять рекурсию :-)
-            }
-        }
-        return list;
     }
 }
